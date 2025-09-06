@@ -1,8 +1,7 @@
-/* // Todo name
-// Status
-// ID
-// Category
-// Due Date */
+export interface Category {
+    id: string; // unique identifier
+    name: string; // name of the category
+}
 
 export interface Todo {
     readonly id: string; // unique identifier
@@ -12,27 +11,47 @@ export interface Todo {
     readonly dueDate: Date; // due date of the todo
 }
 
-// Example usage:
-const exampleTodo: Todo = {
-    id: '1',
-    name: 'Finish TypeScript project',
-    status: 'in-progress',
-    categoryId: 'work',
-    dueDate: new Date('2023-10-01'),
-};
-
-// Helper function to generate a unique ID
-function generateID(): string {
-    return Math.random().toString(36).substr(2, 9);
+const store = {
+    todos: [] as Todo[],
+    categories: [] as Category[],
 }
 
+
+
 // Function to create a new todo
-export function createTodo(input: Omit<Todo, 'id' | 'dueDate'> & { dueDate: Date | string }): Todo {
-    return { 
+export function createTodo(input: Todo): Todo {
+    const newTodo = { 
         id: generateID(),
         name: input.name,
         status: input.status,
         categoryId: input.categoryId,
         dueDate: typeof input.dueDate === 'string' ? new Date(input.dueDate) : input.dueDate
     };
+    store.todos = [...store.todos, newTodo];
+    return newTodo;
 }
+
+
+// Helper function to generate a unique ID
+function generateID(): string {
+    const now=Date.now().toString(36);
+    const random=Math.random().toString(36).substring(2,8);
+    return now + random;
+}
+
+// function to create a new category
+export function addCategory(name: string): Category {
+    const newCategory = {
+        id: generateID(),
+        name
+    };
+    store.categories = [...store.categories, newCategory];
+    return newCategory;
+}
+
+export function deleteTodo(id: string): boolean {
+    const originalLength = store.todos.length;
+    store.todos = store.todos.filter(todo => todo.id !== id);
+    return store.todos.length < originalLength; // returns true if a todo was deleted
+}
+
