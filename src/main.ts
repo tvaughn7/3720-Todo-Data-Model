@@ -1,6 +1,6 @@
 import './style.css'
 
-import { addCategory, createTodo, deleteCategory, deleteTodo, getAllCategories } from './todoModel.ts'
+import { addCategory, createTodo, deleteCategory, deleteTodo, getAllCategories, getAllTodos, editTodo } from './todoModel.ts'
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div>
@@ -13,6 +13,9 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <select id="categoriesDropdown">
       <option value="" disabled selected>Select a category</option>
     </select>
+
+  <div>
+  <button id="edit-todo" type="button">Edit a Todo</button>
   </div>
 `
 
@@ -53,6 +56,19 @@ document.querySelector<HTMLButtonElement>("#delete-todo")!.onclick = () => {
   if (todoId) {
     const success = deleteTodo(todoId)
     alert(success ? `Todo with ID ${todoId} deleted.` : `Todo with ID ${todoId} not found.`)
+  }
+}
+
+document.querySelector<HTMLButtonElement>("#edit-todo")!.onclick = () => {
+  const allTodos = getAllTodos();
+  for (const todo of allTodos) {
+    console.log(`Todo ID: ${todo.id}, Name: ${todo.name}, Status: ${todo.status}, Category ID: ${todo.categoryId}, Due Date: ${todo.dueDate}`);
+  } 
+  const todoId = prompt("Enter todo ID to edit:")
+  if (todoId) {
+    const success = editTodo(todoId, { name: "Updated Todo Name", status: "in-progress" })
+    
+    alert(success ? `Todo with ID ${todoId} has been edited` : `Todo with ID ${todoId} not found.`)
   }
 }
 

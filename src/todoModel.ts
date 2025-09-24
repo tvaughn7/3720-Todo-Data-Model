@@ -4,11 +4,11 @@ export interface Category {
 }
 
 export interface Todo {
-    readonly id: string; // unique identifier
-    readonly name: string; // name of the todo
-    readonly status: 'pending' | 'in-progress' | 'completed'; // status of the todo
-    readonly categoryId: string; // category of the todo
-    readonly dueDate: Date; // due date of the todo
+    id: string; // unique identifier
+    name: string; // name of the todo
+    status: 'pending' | 'in-progress' | 'completed'; // status of the todo
+    categoryId: string; // category of the todo
+    dueDate: Date; // due date of the todo
 }
 
 export interface TodoInput {
@@ -25,7 +25,6 @@ const store = {
 
 
 
-// Function to create a new todo
 export function createTodo(input: TodoInput): Todo {
     const newTodo = { 
         id: generateID(),
@@ -37,12 +36,36 @@ export function createTodo(input: TodoInput): Todo {
 
     // Create a new array with the added todo
     store.todos = [...store.todos, newTodo];
-    console.log(store.todos);
+    console.log('Todo created:', newTodo);
     return newTodo;
 }
 
-
-
+export function editTodo(id: string, updates: Partial<Pick<Todo, 'name' | 'status' | 'categoryId' | 'dueDate'>>): Todo | undefined {
+    const todoIndex = store.todos.findIndex(todo => todo.id === id);
+    
+    if (todoIndex === -1) {
+        console.warn(`Todo with ID ${id} not found.`);
+        return undefined; // Todo not found
+    }
+    if (updates.name !== undefined) {
+         const newTodoName = updates.name.trim();
+         if (!newTodoName) {
+             console.warn('Todo name cannot be empty.');
+             return undefined; // Invalid name
+         }
+         store.todos[todoIndex].name = newTodoName;
+    }
+if (updates.status !== undefined) {
+    store.todos[todoIndex].status = updates.status;
+}
+    if (updates.categoryId !== undefined) {
+        store.todos[todoIndex].categoryId = updates.categoryId;
+    }
+    if (updates.dueDate !== undefined) {
+        store.todos[todoIndex].dueDate = updates.dueDate;
+    }
+    return store.todos[todoIndex];
+}
 
 // Helper function to generate a unique ID
 function generateID(): string {
@@ -79,4 +102,8 @@ export function deleteCategory(id: string): boolean {
 
 export function getAllCategories(): Category[] {
     return [...store.categories]; 
+}
+
+export function getAllTodos(): Todo[] {
+    return [...store.todos]; 
 }
