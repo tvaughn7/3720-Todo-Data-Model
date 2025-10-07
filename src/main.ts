@@ -38,29 +38,114 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
         </div>
       </div>
     </div>
+
+    <!-- Add Category Modal -->
+    <div id="add-category-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
+      <div class="bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">Add Category</h2>
+        <form id="add-category-form" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Category Name</label>
+            <input 
+              type="text" 
+              id="category-name-input" 
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              placeholder="Enter category name..."
+            />
+          </div>
+          <div class="flex gap-3 pt-4">
+            <button 
+              type="submit" 
+              class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors"
+            >
+              Add Category
+            </button>
+            <button 
+              type="button" 
+              id="cancel-category" 
+              class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 rounded-lg transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Add Todo Modal -->
+    <div id="add-todo-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
+      <div class="bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">Add Todo</h2>
+        <form id="add-todo-form" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Task Name</label>
+            <input 
+              type="text" 
+              id="todo-name-input" 
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              placeholder="Enter task name..."
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+            <select 
+              id="todo-category-input" 
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+            >
+              <option value="" disabled selected>Select category</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+            <select 
+              id="todo-status-input" 
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+            >
+              <option value="pending">Pending</option>
+              <option value="in-progress">In Progress</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Due Date</label>
+            <input 
+              type="date" 
+              id="todo-date-input" 
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+            />
+          </div>
+          <div class="flex gap-3 pt-4">
+            <button 
+              type="submit" 
+              class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition-colors"
+            >
+              Add Todo
+            </button>
+            <button 
+              type="button" 
+              id="cancel-todo" 
+              class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 rounded-lg transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 `
 
 // Your original button event handlers
 document.querySelector<HTMLButtonElement>('#add-category')!.onclick = () => {
-  const categoryName = prompt('Enter category name:')
-  if (categoryName) {
-    const newCategory = addCategory(categoryName)
-    updateCategoriesDropdown(); // Update the dropdown after adding a new category
-    alert(`Category "${newCategory.name}" added!`)
-  }
+  openAddCategoryModal();
 }
 
 document.querySelector<HTMLButtonElement>("#add-todo")!.onclick = () => {
-  const todoName = prompt("Enter todo name:")
-  const newCategory = addCategory("Default Category")
-
-  if (todoName && newCategory) {
-    const dueDate = new Date("2025-09-18")
-    const newTodo = createTodo({ name: todoName, status: "pending", categoryId: newCategory.id, dueDate })
-    alert(`Todo added with ID: ${newTodo.id}, name: ${newTodo.name}, categoryId: ${newTodo.categoryId}, dueDate: ${newTodo.dueDate}`)
-    todoViewer.renderTodos(); // Refresh the todo view
-  }
+  openAddTodoModal();
 }
 
 document.querySelector<HTMLButtonElement>("#delete-category")!.onclick = () => {
@@ -71,6 +156,81 @@ document.querySelector<HTMLButtonElement>("#delete-category")!.onclick = () => {
   }
 }
 
+// Modal functions
+function openAddCategoryModal() {
+  const modal = document.getElementById('add-category-modal');
+  if (modal) {
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+}
+
+function closeAddCategoryModal() {
+  const modal = document.getElementById('add-category-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+  const form = document.getElementById('add-category-form') as HTMLFormElement;
+  form?.reset();
+}
+
+function openAddTodoModal() {
+  updateTodoCategoryDropdown();
+  const modal = document.getElementById('add-todo-modal');
+  if (modal) {
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+}
+
+function closeAddTodoModal() {
+  const modal = document.getElementById('add-todo-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+  const form = document.getElementById('add-todo-form') as HTMLFormElement;
+  form?.reset();
+}
+
+// Add Category Form Handler
+document.getElementById('add-category-form')!.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const nameInput = document.getElementById('category-name-input') as HTMLInputElement;
+  const categoryName = nameInput.value.trim();
+  
+  if (categoryName) {
+    addCategory(categoryName);
+    updateCategoriesDropdown();
+    closeAddCategoryModal();
+  }
+});
+
+document.getElementById('cancel-category')!.addEventListener('click', closeAddCategoryModal);
+
+// Add Todo Form Handler
+document.getElementById('add-todo-form')!.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const nameInput = document.getElementById('todo-name-input') as HTMLInputElement;
+  const categoryInput = document.getElementById('todo-category-input') as HTMLSelectElement;
+  const statusInput = document.getElementById('todo-status-input') as HTMLSelectElement;
+  const dateInput = document.getElementById('todo-date-input') as HTMLInputElement;
+  
+  const todoName = nameInput.value.trim();
+  const categoryId = categoryInput.value;
+  const status = statusInput.value as 'pending' | 'in-progress' | 'completed';
+  const dueDate = new Date(dateInput.value);
+  
+  if (todoName && categoryId) {
+    createTodo({ name: todoName, status, categoryId, dueDate });
+    todoViewer.renderTodos();
+    closeAddTodoModal();
+  }
+});
+
+document.getElementById('cancel-todo')!.addEventListener('click', closeAddTodoModal);
+
 // Function to populate categories dropdown
 function updateCategoriesDropdown() {
   const dropdown = document.querySelector<HTMLSelectElement>("#categoriesDropdown")!;
@@ -78,6 +238,23 @@ function updateCategoriesDropdown() {
 
   // Clear existing options (except the first placeholder)
   dropdown.innerHTML = '<option value="" disabled selected>Select a category</option>';
+
+  // Add each category as an option
+  categories.forEach(category => {
+    const option = document.createElement('option');
+    option.value = category.id;
+    option.textContent = category.name;
+    dropdown.appendChild(option);
+  });
+}
+
+// Function to populate todo category dropdown in the modal
+function updateTodoCategoryDropdown() {
+  const dropdown = document.getElementById('todo-category-input') as HTMLSelectElement;
+  const categories = getAllCategories();
+
+  // Clear existing options
+  dropdown.innerHTML = '<option value="" disabled selected>Select category</option>';
 
   // Add each category as an option
   categories.forEach(category => {
