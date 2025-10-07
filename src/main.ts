@@ -20,15 +20,6 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
           <button id="delete-category" type="button" class="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
             Delete Category
           </button>
-          <button id="delete-todo" type="button" class="bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
-            Delete Todo
-          </button>
-          <button id="edit-todo" type="button" class="bg-purple-500 hover:bg-purple-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
-            Edit Todo
-          </button>
-          <button id="refresh-todos" type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
-            Refresh View
-          </button>
         </div>
 
         <div class="mb-4">
@@ -78,34 +69,6 @@ document.querySelector<HTMLButtonElement>("#delete-category")!.onclick = () => {
     const success = deleteCategory(categoryId)
     alert(success ? `Category with ID ${categoryId} deleted.` : `Category with ID ${categoryId} not found.`)
   }
-}
-
-document.querySelector<HTMLButtonElement>("#delete-todo")!.onclick = () => {
-  const todoId = prompt("Enter todo ID to delete:")
-  if (todoId) {
-    const success = deleteTodo(todoId)
-    alert(success ? `Todo with ID ${todoId} deleted.` : `Todo with ID ${todoId} not found.`)
-    todoViewer.renderTodos(); // Refresh the todo view
-  }
-}
-
-document.querySelector<HTMLButtonElement>("#edit-todo")!.onclick = () => {
-  const allTodos = getAllTodos();
-  for (const todo of allTodos) {
-    console.log(`Todo ID: ${todo.id}, Name: ${todo.name}, Status: ${todo.status}, Category ID: ${todo.categoryId}, Due Date: ${todo.dueDate}`);
-  }
-  const todoId = prompt("Enter todo ID to edit:")
-  if (todoId) {
-    const success = editTodo(todoId, { name: "Updated Todo Name", status: "in-progress" })
-
-    alert(success ? `Todo with ID ${todoId} has been edited` : `Todo with ID ${todoId} not found.`)
-    todoViewer.renderTodos(); // Refresh the todo view
-  }
-}
-
-// Add refresh button handler
-document.querySelector<HTMLButtonElement>("#refresh-todos")!.onclick = () => {
-  todoViewer.renderTodos();
 }
 
 // Function to populate categories dropdown
