@@ -148,11 +148,16 @@ document.querySelector<HTMLButtonElement>("#add-todo")!.onclick = () => {
   openAddTodoModal();
 }
 
-document.querySelector<HTMLButtonElement>("#delete-category")!.onclick = () => {
+document.querySelector<HTMLButtonElement>("#delete-category")!.onclick = async () => {
   const categoryId = prompt("Enter category ID to delete:")
   if (categoryId) {
-    const success = deleteCategory(categoryId)
-    alert(success ? `Category with ID ${categoryId} deleted.` : `Category with ID ${categoryId} not found.`)
+    try {
+      await deleteCategory(categoryId)
+      alert(`Category with ID ${categoryId} deleted.`)
+      updateCategoriesDropdown()
+    } catch (error) {
+      alert(`Failed to delete category: ${error}`)
+    }
   }
 }
 
@@ -195,22 +200,26 @@ function closeAddTodoModal() {
 }
 
 // Add Category Form Handler
-document.getElementById('add-category-form')!.addEventListener('submit', (e) => {
+document.getElementById('add-category-form')!.addEventListener('submit', async (e) => {
   e.preventDefault();
   const nameInput = document.getElementById('category-name-input') as HTMLInputElement;
   const categoryName = nameInput.value.trim();
   
   if (categoryName) {
-    addCategory(categoryName);
-    updateCategoriesDropdown();
-    closeAddCategoryModal();
+    try {
+      await addCategory(categoryName);
+      await updateCategoriesDropdown();
+      closeAddCategoryModal();
+    } catch (error) {
+      alert(`Failed to add category: ${error}`);
+    }
   }
 });
 
 document.getElementById('cancel-category')!.addEventListener('click', closeAddCategoryModal);
 
 // Add Todo Form Handler
-document.getElementById('add-todo-form')!.addEventListener('submit', (e) => {
+document.getElementById('add-todo-form')!.addEventListener('submit', async (e) => {
   e.preventDefault();
   const nameInput = document.getElementById('todo-name-input') as HTMLInputElement;
   const categoryInput = document.getElementById('todo-category-input') as HTMLSelectElement;
@@ -223,18 +232,22 @@ document.getElementById('add-todo-form')!.addEventListener('submit', (e) => {
   const dueDate = new Date(dateInput.value);
   
   if (todoName && categoryId) {
-    createTodo({ name: todoName, status, categoryId, dueDate });
-    todoViewer.renderTodos();
-    closeAddTodoModal();
+    try {
+      await createTodo({ name: todoName, status, categoryId, dueDate });
+      await todoViewer.renderTodos();
+      closeAddTodoModal();
+    } catch (error) {
+      alert(`Failed to create todo: ${error}`);
+    }
   }
 });
 
 document.getElementById('cancel-todo')!.addEventListener('click', closeAddTodoModal);
 
 // Function to populate categories dropdown
-function updateCategoriesDropdown() {
+async function updateCategoriesDropdown() {
   const dropdown = document.querySelector<HTMLSelectElement>("#categoriesDropdown")!;
-  const categories = getAllCategories();
+  const categories = await getAllCategories();
 
   // Clear existing options (except the first placeholder)
   dropdown.innerHTML = '<option value="" disabled selected>Select a category</option>';
@@ -249,9 +262,9 @@ function updateCategoriesDropdown() {
 }
 
 // Function to populate todo category dropdown in the modal
-function updateTodoCategoryDropdown() {
+async function updateTodoCategoryDropdown() {
   const dropdown = document.getElementById('todo-category-input') as HTMLSelectElement;
-  const categories = getAllCategories();
+  const categories = await getAllCategories();
 
   // Clear existing options
   dropdown.innerHTML = '<option value="" disabled selected>Select category</option>';
@@ -274,13 +287,13 @@ class TodoViewer {
     this.initialize();
   }
 
-  private initialize(): void {
-    this.renderTodos();
+  private async initialize(): Promise<void> {
+    await this.renderTodos();
   }
 
-  public renderTodos(): void {
-    const todos = getAllTodos();
-    const categories = getAllCategories();
+  public async renderTodos(): Promise<void> {
+    const todos = await getAllTodos();
+    const categories = await getAllCategories();
 
     // Create a map for quick category lookup
     const categoryMap = new Map<string, string>();
@@ -405,27 +418,27 @@ class TodoViewer {
     return div.innerHTML;
   }
 
-  private handleEditTodo(todoId: string): void {
+  private async handleEditTodo(todoId: string): Promise<void> {
     const newName = prompt('Enter new name for the todo:');
     if (newName && newName.trim()) {
-      const success = editTodo(todoId, { name: newName.trim() });
-      if (success) {
-        this.renderTodos(); // Refresh the view
+      try {
+        await editTodo(todoId, { name: newName.trim() });
+        await this.renderTodos(); // Refresh the view
         alert('Todo updated successfully!');
-      } else {
-        alert('Todo not found!');
+      } catch (error) {
+        alert(`Failed to update todo: ${error}`);
       }
     }
   }
 
-  private handleDeleteTodo(todoId: string): void {
+  private async handleDeleteTodo(todoId: string): Promise<void> {
     if (confirm('Are you sure you want to delete this todo?')) {
-      const success = deleteTodo(todoId);
-      if (success) {
-        this.renderTodos(); // Refresh the view
+      try {
+        await deleteTodo(todoId);
+        await this.renderTodos(); // Refresh the view
         alert('Todo deleted successfully!');
-      } else {
-        alert('Todo not found!');
+      } catch (error) {
+        alert(`Failed to delete todo: ${error}`);
       }
     }
   }

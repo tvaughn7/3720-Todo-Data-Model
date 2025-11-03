@@ -1,3 +1,15 @@
+// Import API functions
+import {
+  fetchAllTodos,
+  createTodoAPI,
+  updateTodoAPI,
+  deleteTodoAPI,
+  clearCompletedTodosAPI,
+  fetchAllCategories,
+  createCategoryAPI,
+  deleteCategoryAPI,
+} from './apiService'
+
 export interface Category {
     id: string; // unique identifier
     name: string; // name of the category
@@ -18,92 +30,39 @@ export interface TodoInput {
     dueDate: Date;
 }
 
-const store = {
-    todos: [] as Todo[],
-    categories: [] as Category[],
+// Replace store functions with API calls
+export async function getAllTodos(): Promise<Todo[]> {
+  return fetchAllTodos()
 }
 
-
-
-export function createTodo(input: TodoInput): Todo {
-    const newTodo = { 
-        id: generateID(),
-        name: input.name,
-        status: input.status,
-        categoryId: input.categoryId,
-        dueDate: typeof input.dueDate === 'string' ? new Date(input.dueDate) : input.dueDate
-    };
-
-    // Create a new array with the added todo
-    store.todos = [...store.todos, newTodo];
-    console.log('Todo created:', newTodo);
-    return newTodo;
+export async function createTodo(input: TodoInput): Promise<Todo> {
+  return createTodoAPI(input)
 }
 
-export function editTodo(id: string, updates: Partial<Pick<Todo, 'name' | 'status' | 'categoryId' | 'dueDate'>>): Todo | undefined {
-    const todoIndex = store.todos.findIndex(todo => todo.id === id);
-    
-    if (todoIndex === -1) {
-        console.warn(`Todo with ID ${id} not found.`);
-        return undefined; // Todo not found
-    }
-    if (updates.name !== undefined) {
-         const newTodoName = updates.name.trim();
-         if (!newTodoName) {
-             console.warn('Todo name cannot be empty.');
-             return undefined; // Invalid name
-         }
-         store.todos[todoIndex].name = newTodoName;
-    }
-if (updates.status !== undefined) {
-    store.todos[todoIndex].status = updates.status;
-}
-    if (updates.categoryId !== undefined) {
-        store.todos[todoIndex].categoryId = updates.categoryId;
-    }
-    if (updates.dueDate !== undefined) {
-        store.todos[todoIndex].dueDate = updates.dueDate;
-    }
-    return store.todos[todoIndex];
+export async function editTodo(
+  id: string,
+  updates: Partial<Pick<Todo, 'name' | 'status' | 'categoryId' | 'dueDate'>>
+): Promise<Todo> {
+  return updateTodoAPI(id, updates)
 }
 
-// Helper function to generate a unique ID
-function generateID(): string {
-    const now=Date.now().toString(36);
-    const random=Math.random().toString(36).substring(2,8);
-    return now + random;
+export async function deleteTodo(id: string): Promise<void> {
+  return deleteTodoAPI(id)
 }
 
-// function to create a new category
-export function addCategory(name: string): Category {
-    const newCategory = {
-        id: generateID(),
-        name
-    };
-    store.categories = [...store.categories, newCategory];
-    console.log(store.categories);
-    return newCategory;
+export async function clearCompletedTodos(): Promise<number> {
+  const result = await clearCompletedTodosAPI()
+  return result.deletedCount
 }
 
-export function deleteTodo(id: string): boolean {
-    const originalLength = store.todos.length;
-    store.todos = store.todos.filter(todo => todo.id !== id);
-    console.log(store.todos);
-    return store.todos.length < originalLength; // returns true if a todo was deleted
+export async function getAllCategories(): Promise<Category[]> {
+  return fetchAllCategories()
 }
 
-export function deleteCategory(id: string): boolean {
-    const originalLength = store.categories.length;
-    // Create a new array excluding the category with the given id
-    store.categories = store.categories.filter(category => category.id !== id);
-    console.log(store.categories);
-    return store.categories.length < originalLength; // returns true if a category was deleted
+export async function addCategory(name: string): Promise<Category> {
+  return createCategoryAPI(name)
 }
 
-export function getAllCategories(): Category[] {
-    return [...store.categories]; 
-}
-
-export function getAllTodos(): Todo[] {
-    return [...store.todos]; 
+export async function deleteCategory(id: string): Promise<void> {
+  return deleteCategoryAPI(id)
 }
