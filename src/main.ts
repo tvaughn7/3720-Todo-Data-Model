@@ -1,11 +1,106 @@
 import './style.css'
+import { ChatViewer } from './chatViewer'
 
 import { addCategory, createTodo, deleteCategory, deleteTodo, getAllCategories, getAllTodos, editTodo } from './todoModel.ts'
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
+// Simple router to handle page navigation
+class AppRouter {
+  private currentPage: 'todos' | 'chat' = 'todos'
+  private appContainer: HTMLElement
+  private todoViewer?: TodoViewer
+
+  constructor() {
+    this.appContainer = document.querySelector<HTMLDivElement>('#app')!
+    this.initialize()
+  }
+
+  private initialize() {
+    // Check URL hash for initial page
+    const hash = window.location.hash.slice(1)
+    if (hash === 'chat') {
+      this.currentPage = 'chat'
+    }
+
+    this.render()
+
+    // Listen for hash changes
+    window.addEventListener('hashchange', () => {
+      const newHash = window.location.hash.slice(1)
+      if (newHash === 'chat' || newHash === 'todos') {
+        this.currentPage = newHash
+        this.render()
+      }
+    })
+  }
+
+  private render() {
+    if (this.currentPage === 'chat') {
+      this.renderChatPage()
+    } else {
+      this.renderTodoPage()
+    }
+  }
+
+  private renderChatPage() {
+    this.appContainer.innerHTML = `
+      <div id="nav-bar"></div>
+      <div id="chat-container"></div>
+    `
+    this.renderNavBar()
+    new ChatViewer(document.getElementById('chat-container')!)
+  }
+
+  private renderTodoPage() {
+    this.renderTodoUI()
+  }
+
+  private renderNavBar() {
+    const navBar = document.getElementById('nav-bar')!
+    const isTodoPage = this.currentPage === 'todos'
+    const isChatPage = this.currentPage === 'chat'
+
+    navBar.innerHTML = `
+      <nav class="bg-white shadow-md border-b border-gray-200">
+        <div class="max-w-6xl mx-auto px-4">
+          <div class="flex items-center justify-between h-16">
+            <div class="flex items-center space-x-4">
+              <h1 class="text-xl font-bold text-gray-800">Todo App</h1>
+              <div class="flex space-x-2">
+                <a
+                  href="#todos"
+                  class="px-4 py-2 rounded-lg font-medium transition-colors ${
+                    isTodoPage
+                      ? 'bg-blue-500 text-white'
+                      : 'text-gray-600 hover:bg-gray-100'
+                  }"
+                >
+                  📋 Todos
+                </a>
+                <a
+                  href="#chat"
+                  class="px-4 py-2 rounded-lg font-medium transition-colors ${
+                    isChatPage
+                      ? 'bg-blue-500 text-white'
+                      : 'text-gray-600 hover:bg-gray-100'
+                  }"
+                >
+                  🤖 AI Chat
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    `
+  }
+
+  private renderTodoUI() {
+    // Render the complete HTML structure at once
+    this.appContainer.innerHTML = `
+  <div id="nav-bar"></div>
   <div class="min-h-screen bg-gray-50 py-8">
     <div class="max-w-6xl mx-auto px-4">
-      <h1 class="text-4xl font-bold text-gray-800 mb-8 text-center">Todo App</h1>
+      <h1 class="text-4xl font-bold text-gray-800 mb-8 text-center">Todo Manager</h1>
 
       <!-- Controls Section -->
       <div class="bg-white rounded-lg shadow-md p-6 mb-6">
@@ -138,26 +233,86 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     </div>
   </div>
 `
+    // NOW render the nav bar after all HTML is in place
+    this.renderNavBar()
 
-// Your original button event handlers
-document.querySelector<HTMLButtonElement>('#add-category')!.onclick = () => {
-  openAddCategoryModal();
-}
+    // Initialize todo functionality after HTML is rendered
+    this.initializeTodoHandlers()
+  }
 
-document.querySelector<HTMLButtonElement>("#add-todo")!.onclick = () => {
-  openAddTodoModal();
-}
+  private initializeTodoHandlers() {
+    // Initialize categories dropdown
+    updateCategoriesDropdown();
 
-document.querySelector<HTMLButtonElement>("#delete-category")!.onclick = async () => {
-  const categoryId = prompt("Enter category ID to delete:")
-  if (categoryId) {
-    try {
-      await deleteCategory(categoryId)
-      alert(`Category with ID ${categoryId} deleted.`)
-      updateCategoriesDropdown()
-    } catch (error) {
-      alert(`Failed to delete category: ${error}`)
+    // Your original button event handlers
+    document.querySelector<HTMLButtonElement>('#add-category')!.onclick = () => {
+      openAddCategoryModal();
     }
+
+    document.querySelector<HTMLButtonElement>("#add-todo")!.onclick = () => {
+      openAddTodoModal();
+    }
+
+    document.querySelector<HTMLButtonElement>("#delete-category")!.onclick = async () => {
+      const categoryId = prompt("Enter category ID to delete:")
+      if (categoryId) {
+        try {
+          await deleteCategory(categoryId)
+          alert(`Category with ID ${categoryId} deleted.`)
+          updateCategoriesDropdown()
+        } catch (error) {
+          alert(`Failed to delete category: ${error}`)
+        }
+      }
+    }
+
+    // Initialize the todo viewer
+    this.todoViewer = new TodoViewer();
+
+    // Add Category Form Handler
+    document.getElementById('add-category-form')!.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nameInput = document.getElementById('category-name-input') as HTMLInputElement;
+      const categoryName = nameInput.value.trim();
+      
+      if (categoryName) {
+        try {
+          await addCategory(categoryName);
+          await updateCategoriesDropdown();
+          closeAddCategoryModal();
+        } catch (error) {
+          alert(`Failed to add category: ${error}`);
+        }
+      }
+    });
+
+    document.getElementById('cancel-category')!.addEventListener('click', closeAddCategoryModal);
+
+    // Add Todo Form Handler
+    document.getElementById('add-todo-form')!.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nameInput = document.getElementById('todo-name-input') as HTMLInputElement;
+      const categoryInput = document.getElementById('todo-category-input') as HTMLSelectElement;
+      const statusInput = document.getElementById('todo-status-input') as HTMLSelectElement;
+      const dateInput = document.getElementById('todo-date-input') as HTMLInputElement;
+      
+      const todoName = nameInput.value.trim();
+      const categoryId = categoryInput.value;
+      const status = statusInput.value as 'pending' | 'in-progress' | 'completed';
+      const dueDate = new Date(dateInput.value);
+      
+      if (todoName && categoryId) {
+        try {
+          await createTodo({ name: todoName, status, categoryId, dueDate });
+          await this.todoViewer?.renderTodos();
+          closeAddTodoModal();
+        } catch (error) {
+          alert(`Failed to create todo: ${error}`);
+        }
+      }
+    });
+
+    document.getElementById('cancel-todo')!.addEventListener('click', closeAddTodoModal);
   }
 }
 
@@ -198,51 +353,6 @@ function closeAddTodoModal() {
   const form = document.getElementById('add-todo-form') as HTMLFormElement;
   form?.reset();
 }
-
-// Add Category Form Handler
-document.getElementById('add-category-form')!.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const nameInput = document.getElementById('category-name-input') as HTMLInputElement;
-  const categoryName = nameInput.value.trim();
-  
-  if (categoryName) {
-    try {
-      await addCategory(categoryName);
-      await updateCategoriesDropdown();
-      closeAddCategoryModal();
-    } catch (error) {
-      alert(`Failed to add category: ${error}`);
-    }
-  }
-});
-
-document.getElementById('cancel-category')!.addEventListener('click', closeAddCategoryModal);
-
-// Add Todo Form Handler
-document.getElementById('add-todo-form')!.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const nameInput = document.getElementById('todo-name-input') as HTMLInputElement;
-  const categoryInput = document.getElementById('todo-category-input') as HTMLSelectElement;
-  const statusInput = document.getElementById('todo-status-input') as HTMLSelectElement;
-  const dateInput = document.getElementById('todo-date-input') as HTMLInputElement;
-  
-  const todoName = nameInput.value.trim();
-  const categoryId = categoryInput.value;
-  const status = statusInput.value as 'pending' | 'in-progress' | 'completed';
-  const dueDate = new Date(dateInput.value);
-  
-  if (todoName && categoryId) {
-    try {
-      await createTodo({ name: todoName, status, categoryId, dueDate });
-      await todoViewer.renderTodos();
-      closeAddTodoModal();
-    } catch (error) {
-      alert(`Failed to create todo: ${error}`);
-    }
-  }
-});
-
-document.getElementById('cancel-todo')!.addEventListener('click', closeAddTodoModal);
 
 // Function to populate categories dropdown
 async function updateCategoriesDropdown() {
@@ -444,5 +554,5 @@ class TodoViewer {
   }
 }
 
-// Initialize the todo viewer
-const todoViewer = new TodoViewer();
+// Initialize the app router
+new AppRouter()

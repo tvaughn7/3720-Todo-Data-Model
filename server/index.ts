@@ -2,13 +2,20 @@ import express from 'express'
 import cors from 'cors'
 import todoRoutes from './routes/todoRoutes.js'
 import categoryRoutes from './routes/categoryRoutes.js'
+import chatRoutes from './routes/chatRoutes.js'
 import { initializeSeedData } from './models/todoStore.js'
 
 const app = express()
 const PORT = process.env.PORT || 3000
 
 // Middleware
-app.use(cors()) // Enable CORS for frontend
+// CORS configuration
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}))
 app.use(express.json()) // Parse JSON bodies
 
 // Initialize seed data
@@ -17,6 +24,7 @@ initializeSeedData()
 // Routes
 app.use('/api/todos', todoRoutes)
 app.use('/api/categories', categoryRoutes)
+app.use('/api/chat', chatRoutes)
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
