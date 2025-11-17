@@ -2,7 +2,13 @@ const API_BASE_URL = 'http://localhost:3000/api'
 
 export interface ChatMessage {
   role: 'user' | 'assistant' | 'system'
-  content: string
+  content: string | Array<{
+    type: 'text' | 'image_url'
+    text?: string
+    image_url?: {
+      url: string
+    }
+  }>
 }
 
 export interface ChatRequest {

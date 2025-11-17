@@ -2,7 +2,13 @@ import OpenAI from 'openai'
 
 interface ChatMessage {
   role: 'system' | 'user' | 'assistant'
-  content: string
+  content: string | Array<{
+    type: 'text' | 'image_url'
+    text?: string
+    image_url?: {
+      url: string
+    }
+  }>
 }
 
 export class OllamaService {
@@ -23,9 +29,15 @@ export class OllamaService {
    */
   async *chatStream(messages: ChatMessage[]): AsyncGenerator<string, void, unknown> {
     try {
+      console.log('🤖 Sending to Ollama:', {
+        model: this.model,
+        messageCount: messages.length,
+        lastMessage: messages[messages.length - 1]
+      })
+
       const stream = await this.client.chat.completions.create({
         model: this.model,
-        messages: messages,
+        messages: messages as any, // Cast to any for vision support
         stream: true,
         temperature: 0.7,
         // Optimize for speed
@@ -39,9 +51,14 @@ export class OllamaService {
           yield content
         }
       }
-    } catch (error) {
-      console.error('Error in chatStream:', error)
-      throw new Error(`Failed to get response from Ollama: ${error}`)
+    } catch (error: any) {
+      console.error('❌ Error in chatStream:', {
+        message: error.message,
+        status: error.status,
+        response: error.response?.data,
+        stack: error.stack
+      })
+      throw new Error(`Failed to get response from Ollama: ${error.message || error}`)
     }
   }
 
@@ -52,7 +69,7 @@ export class OllamaService {
     try {
       const response = await this.client.chat.completions.create({
         model: this.model,
-        messages: messages,
+        messages: messages as any, // Cast to any for vision support
         stream: false,
         temperature: 0.7,
         // Optimize for speed
