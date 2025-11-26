@@ -26,20 +26,20 @@ export class ChatViewer {
 
   private render(): void {
     this.container.innerHTML = `
-      <div class="min-h-screen bg-gray-50 flex flex-col">
+      <div class="min-h-screen flex flex-col items-center justify-center py-6">
         <!-- Header -->
-        <div class="bg-white shadow-sm border-b border-gray-200">
-          <div class="max-w-4xl mx-auto px-4 py-4">
+        <div class="glass card shadow-sm border-b border-gray-200 w-full max-w-4xl mx-auto mb-4">
+          <div class="px-4 py-4">
             <div class="flex items-center justify-between">
               <div>
-                <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2 tracking-tight">
                   🤖 AI Chat Assistant
                 </h1>
                 <p class="text-sm text-gray-500 mt-1">Powered by Ollama (gpt-oss)</p>
               </div>
               <button
                 id="clear-chat-btn"
-                class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium"
+                class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full transition-colors text-sm font-medium shadow"
               >
                 Clear Chat
               </button>
@@ -48,8 +48,8 @@ export class ChatViewer {
         </div>
 
         <!-- Messages Container -->
-        <div class="flex-1 overflow-y-auto" id="messages-container">
-          <div class="max-w-4xl mx-auto px-4 py-6 space-y-4">
+        <div class="glass card flex-1 overflow-y-auto w-full max-w-4xl mx-auto mb-4" id="messages-container">
+          <div class="px-4 py-6 space-y-4">
             <!-- Welcome message -->
             <div class="text-center py-8">
               <div class="inline-block bg-blue-100 text-blue-800 px-6 py-3 rounded-lg">
@@ -60,8 +60,8 @@ export class ChatViewer {
         </div>
 
         <!-- Input Area -->
-        <div class="bg-white border-t border-gray-200 shadow-lg">
-          <div class="max-w-4xl mx-auto px-4 py-4">
+        <div class="glass card border-t border-gray-200 shadow-lg w-full max-w-4xl mx-auto">
+          <div class="px-4 py-4">
             <!-- Image Preview Area -->
             <div id="image-preview" class="hidden mb-3 relative">
               <img id="preview-img" class="max-h-32 rounded-lg border-2 border-blue-500" />
@@ -81,7 +81,7 @@ export class ChatViewer {
               />
               <button
                 id="upload-btn"
-                class="bg-gray-500 hover:bg-gray-600 text-white px-4 rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                class="bg-gray-500 hover:bg-gray-600 text-white px-4 rounded-full transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed shadow"
                 title="Upload image"
               >
                 📷
@@ -94,7 +94,7 @@ export class ChatViewer {
               ></textarea>
               <button
                 id="send-btn"
-                class="bg-blue-500 hover:bg-blue-600 text-white px-6 rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                class="bg-blue-500 hover:bg-blue-600 text-white px-6 rounded-full transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed shadow"
               >
                 Send 📤
               </button>

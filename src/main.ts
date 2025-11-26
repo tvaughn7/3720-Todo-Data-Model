@@ -60,17 +60,17 @@ class AppRouter {
     const isChatPage = this.currentPage === 'chat'
 
     navBar.innerHTML = `
-      <nav class="bg-white shadow-md border-b border-gray-200">
-        <div class="max-w-6xl mx-auto px-4">
+      <nav class="glass shadow-md border-b border-gray-200 mt-2 mb-6 mx-auto max-w-4xl">
+        <div class="px-4">
           <div class="flex items-center justify-between h-16">
             <div class="flex items-center space-x-4">
-              <h1 class="text-xl font-bold text-gray-800">Todo App</h1>
+              <h1 class="text-xl font-bold text-gray-800 tracking-tight">Todo App</h1>
               <div class="flex space-x-2">
                 <a
                   href="#todos"
-                  class="px-4 py-2 rounded-lg font-medium transition-colors ${
+                  class="px-4 py-2 rounded-full font-medium transition-colors ${
                     isTodoPage
-                      ? 'bg-blue-500 text-white'
+                      ? 'bg-blue-500 text-white shadow'
                       : 'text-gray-600 hover:bg-gray-100'
                   }"
                 >
@@ -78,9 +78,9 @@ class AppRouter {
                 </a>
                 <a
                   href="#chat"
-                  class="px-4 py-2 rounded-lg font-medium transition-colors ${
+                  class="px-4 py-2 rounded-full font-medium transition-colors ${
                     isChatPage
-                      ? 'bg-blue-500 text-white'
+                      ? 'bg-blue-500 text-white shadow'
                       : 'text-gray-600 hover:bg-gray-100'
                   }"
                 >
@@ -98,21 +98,21 @@ class AppRouter {
     // Render the complete HTML structure at once
     this.appContainer.innerHTML = `
   <div id="nav-bar"></div>
-  <div class="min-h-screen bg-gray-50 py-8">
-    <div class="max-w-6xl mx-auto px-4">
-      <h1 class="text-4xl font-bold text-gray-800 mb-8 text-center">Todo Manager</h1>
+  <div class="min-h-screen py-8">
+    <div class="max-w-4xl mx-auto px-4">
+      <h1 class="text-4xl font-bold text-gray-800 mb-8 text-center tracking-tight">Todo Manager</h1>
 
       <!-- Controls Section -->
-      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div class="glass card p-6 mb-6">
         <h2 class="text-2xl font-semibold text-gray-700 mb-4">Controls</h2>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-          <button id="add-category" type="button" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+          <button id="add-category" type="button" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-full transition-colors shadow">
             Add Category
           </button>
-          <button id="add-todo" type="button" class="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+          <button id="add-todo" type="button" class="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-full transition-colors shadow">
             Add Todo
           </button>
-          <button id="delete-category" type="button" class="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+          <button id="delete-category" type="button" class="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-full transition-colors shadow">
             Delete Category
           </button>
         </div>
@@ -126,7 +126,7 @@ class AppRouter {
       </div>
 
       <!-- Todo Viewer Section -->
-      <div id="todo-viewer" class="bg-white rounded-lg shadow-md p-6">
+      <div id="todo-viewer" class="glass card p-6">
         <h2 class="text-2xl font-semibold text-gray-700 mb-4">Todo Items</h2>
         <div id="todo-list" class="space-y-4">
           <!-- Todos will be rendered here -->
@@ -136,7 +136,7 @@ class AppRouter {
 
     <!-- Add Category Modal -->
     <div id="add-category-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
-      <div class="bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4">
+      <div class="glass card shadow-2xl p-8 max-w-md w-full mx-4">
         <h2 class="text-2xl font-bold text-gray-800 mb-6">Add Category</h2>
         <form id="add-category-form" class="space-y-4">
           <div>
@@ -152,14 +152,14 @@ class AppRouter {
           <div class="flex gap-3 pt-4">
             <button 
               type="submit" 
-              class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors"
+              class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-full transition-colors shadow"
             >
               Add Category
             </button>
             <button 
               type="button" 
               id="cancel-category" 
-              class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 rounded-lg transition-colors"
+              class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 rounded-full transition-colors shadow"
             >
               Cancel
             </button>
@@ -170,7 +170,7 @@ class AppRouter {
 
     <!-- Add Todo Modal -->
     <div id="add-todo-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
-      <div class="bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4">
+      <div class="glass card shadow-2xl p-8 max-w-md w-full mx-4">
         <h2 class="text-2xl font-bold text-gray-800 mb-6">Add Todo</h2>
         <form id="add-todo-form" class="space-y-4">
           <div>
@@ -216,14 +216,14 @@ class AppRouter {
           <div class="flex gap-3 pt-4">
             <button 
               type="submit" 
-              class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition-colors"
+              class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-full transition-colors shadow"
             >
               Add Todo
             </button>
             <button 
               type="button" 
               id="cancel-todo" 
-              class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 rounded-lg transition-colors"
+              class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 rounded-full transition-colors shadow"
             >
               Cancel
             </button>
@@ -443,7 +443,7 @@ class TodoViewer {
 
   private createTodoElement(todo: any, categoryMap: Map<string, string>): HTMLElement {
     const todoElement = document.createElement('div');
-    todoElement.className = 'bg-gray-50 border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow';
+    todoElement.className = 'card glass p-4 hover:shadow-lg transition-shadow';
 
     const statusColor = this.getStatusColor(todo.status);
     const categoryName = categoryMap.get(todo.categoryId) || 'Unknown Category';
