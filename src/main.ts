@@ -60,28 +60,28 @@ class AppRouter {
     const isChatPage = this.currentPage === 'chat'
 
     navBar.innerHTML = `
-      <nav class="glass shadow-md border-b border-gray-200 mt-2 mb-6 mx-auto max-w-4xl">
-        <div class="px-4">
+      <nav class="bg-white/90 backdrop-blur-xl shadow-lg border-b border-[#9ca3db]/30 sticky top-0 z-40">
+        <div class="max-w-5xl mx-auto px-6">
           <div class="flex items-center justify-between h-16">
-            <div class="flex items-center space-x-4">
-              <h1 class="text-xl font-bold text-gray-800 tracking-tight">Todo App</h1>
-              <div class="flex space-x-2">
+            <div class="flex items-center space-x-8">
+              <h1 class="text-2xl font-black bg-gradient-to-r from-[#454b66] to-[#677db7] bg-clip-text text-transparent">✨ TaskFlow</h1>
+              <div class="flex space-x-1 bg-[#9ca3db]/20 p-1 rounded-xl">
                 <a
                   href="#todos"
-                  class="px-4 py-2 rounded-full font-medium transition-colors ${
+                  class="px-5 py-2 rounded-lg font-semibold text-sm transition-all duration-200 ${
                     isTodoPage
-                      ? 'bg-blue-500 text-white shadow'
-                      : 'text-gray-600 hover:bg-gray-100'
+                      ? 'bg-[#677db7] text-white shadow-md'
+                      : 'text-[#454b66] hover:text-[#191308]'
                   }"
                 >
                   📋 Todos
                 </a>
                 <a
                   href="#chat"
-                  class="px-4 py-2 rounded-full font-medium transition-colors ${
+                  class="px-5 py-2 rounded-lg font-semibold text-sm transition-all duration-200 ${
                     isChatPage
-                      ? 'bg-blue-500 text-white shadow'
-                      : 'text-gray-600 hover:bg-gray-100'
+                      ? 'bg-[#677db7] text-white shadow-md'
+                      : 'text-[#454b66] hover:text-[#191308]'
                   }"
                 >
                   🤖 AI Chat
@@ -98,70 +98,82 @@ class AppRouter {
     // Render the complete HTML structure at once
     this.appContainer.innerHTML = `
   <div id="nav-bar"></div>
-  <div class="min-h-screen py-8">
-    <div class="max-w-4xl mx-auto px-4">
-      <h1 class="text-4xl font-bold text-gray-800 mb-8 text-center tracking-tight">Todo Manager</h1>
+  <div class="min-h-screen py-10">
+    <div class="max-w-5xl mx-auto px-6">
+      <!-- Hero Header -->
+      <div class="text-center mb-10">
+        <h1 class="text-5xl font-black text-[#191308] mb-3 tracking-tight">Todo Manager</h1>
+        <p class="text-[#454b66] text-lg">Organize your tasks efficiently ✨</p>
+      </div>
 
-      <!-- Controls Section -->
-      <div class="glass card p-6 mb-6">
-        <h2 class="text-2xl font-semibold text-gray-700 mb-4">Controls</h2>
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-          <button id="add-category" type="button" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-full transition-colors shadow">
+      <!-- Quick Actions Bar -->
+      <div class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-[#9ca3db]/30 p-6 mb-8">
+        <div class="flex flex-wrap items-center gap-4">
+          <button id="add-todo" type="button" class="inline-flex items-center gap-2 bg-gradient-to-r from-[#677db7] to-[#9ca3db] hover:from-[#5a6fa3] hover:to-[#8b93c9] text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg shadow-[#677db7]/25 hover:shadow-xl hover:-translate-y-0.5">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            New Task
+          </button>
+          <button id="add-category" type="button" class="inline-flex items-center gap-2 bg-white hover:bg-[#9ca3db]/10 text-[#454b66] hover:text-[#191308] font-semibold py-3 px-6 rounded-xl transition-all duration-200 border border-[#9ca3db]/50 shadow-sm hover:shadow-md hover:-translate-y-0.5">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
             Add Category
           </button>
-          <button id="add-todo" type="button" class="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-full transition-colors shadow">
-            Add Todo
-          </button>
-          <button id="delete-category" type="button" class="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-full transition-colors shadow">
+          <button id="delete-category" type="button" class="inline-flex items-center gap-2 bg-white hover:bg-red-50 text-[#454b66] hover:text-red-600 font-semibold py-3 px-6 rounded-xl transition-all duration-200 border border-[#9ca3db]/50 hover:border-red-300 shadow-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
             Delete Category
           </button>
-        </div>
-
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-2">Select Category:</label>
-          <select id="categoriesDropdown" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            <option value="" disabled selected>Select a category</option>
-          </select>
+          <div class="flex-1 min-w-[200px]">
+            <select id="categoriesDropdown" class="w-full p-3 bg-white border border-[#9ca3db]/50 rounded-xl focus:ring-2 focus:ring-[#677db7]/30 focus:border-[#677db7] transition-all text-[#454b66]">
+              <option value="" disabled selected>🏷️ Filter by category</option>
+            </select>
+          </div>
         </div>
       </div>
 
-      <!-- Todo Viewer Section -->
-      <div id="todo-viewer" class="glass card p-6">
-        <h2 class="text-2xl font-semibold text-gray-700 mb-4">Todo Items</h2>
-        <div id="todo-list" class="space-y-4">
+      <!-- Todo List Section -->
+      <div id="todo-viewer" class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-[#9ca3db]/30 p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-xl font-bold text-[#191308]">📝 Your Tasks</h2>
+          <span class="text-sm text-[#454b66]" id="task-count"></span>
+        </div>
+        <div id="todo-list" class="space-y-3">
           <!-- Todos will be rendered here -->
         </div>
       </div>
     </div>
 
     <!-- Add Category Modal -->
-    <div id="add-category-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
-      <div class="glass card shadow-2xl p-8 max-w-md w-full mx-4">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Add Category</h2>
-        <form id="add-category-form" class="space-y-4">
+    <div id="add-category-modal" class="fixed inset-0 bg-[#191308]/50 backdrop-blur-sm z-50 hidden items-center justify-center">
+      <div class="bg-white border border-[#9ca3db]/30 rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 transform transition-all">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-12 h-12 bg-[#9ca3db]/20 rounded-xl flex items-center justify-center">
+            <svg class="w-6 h-6 text-[#677db7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+          </div>
+          <h2 class="text-2xl font-bold text-[#191308]">New Category</h2>
+        </div>
+        <form id="add-category-form" class="space-y-5">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Category Name</label>
+            <label class="block text-sm font-semibold text-[#454b66] mb-2">Category Name</label>
             <input 
               type="text" 
               id="category-name-input" 
               required
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-              placeholder="Enter category name..."
+              class="w-full px-4 py-3 bg-[#9ca3db]/10 border border-[#9ca3db]/30 rounded-xl focus:ring-2 focus:ring-[#677db7]/30 focus:border-[#677db7] outline-none transition-all text-[#191308] placeholder-[#454b66]/50"
+              placeholder="e.g., Work, Personal, Shopping..."
             />
           </div>
-          <div class="flex gap-3 pt-4">
-            <button 
-              type="submit" 
-              class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-full transition-colors shadow"
-            >
-              Add Category
-            </button>
+          <div class="flex gap-3 pt-2">
             <button 
               type="button" 
               id="cancel-category" 
-              class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 rounded-full transition-colors shadow"
+              class="flex-1 bg-[#9ca3db]/20 hover:bg-[#9ca3db]/30 text-[#454b66] font-semibold py-3 rounded-xl transition-all"
             >
               Cancel
+            </button>
+            <button 
+              type="submit" 
+              class="flex-1 bg-gradient-to-r from-[#677db7] to-[#9ca3db] hover:from-[#5a6fa3] hover:to-[#8b93c9] text-white font-semibold py-3 rounded-xl transition-all shadow-lg shadow-[#677db7]/25"
+            >
+              Create Category
             </button>
           </div>
         </form>
@@ -169,63 +181,70 @@ class AppRouter {
     </div>
 
     <!-- Add Todo Modal -->
-    <div id="add-todo-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
-      <div class="glass card shadow-2xl p-8 max-w-md w-full mx-4">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Add Todo</h2>
-        <form id="add-todo-form" class="space-y-4">
+    <div id="add-todo-modal" class="fixed inset-0 bg-[#191308]/50 backdrop-blur-sm z-50 hidden items-center justify-center">
+      <div class="bg-white border border-[#9ca3db]/30 rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 transform transition-all">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-12 h-12 bg-gradient-to-br from-[#677db7] to-[#9ca3db] rounded-xl flex items-center justify-center">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          </div>
+          <h2 class="text-2xl font-bold text-[#191308]">New Task</h2>
+        </div>
+        <form id="add-todo-form" class="space-y-5">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Task Name</label>
+            <label class="block text-sm font-semibold text-[#454b66] mb-2">Task Name</label>
             <input 
               type="text" 
               id="todo-name-input" 
               required
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-              placeholder="Enter task name..."
+              class="w-full px-4 py-3 bg-[#9ca3db]/10 border border-[#9ca3db]/30 rounded-xl focus:ring-2 focus:ring-[#677db7]/30 focus:border-[#677db7] outline-none transition-all text-[#191308] placeholder-[#454b66]/50"
+              placeholder="What needs to be done?"
             />
           </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
-            <select 
-              id="todo-category-input" 
-              required
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-            >
-              <option value="" disabled selected>Select category</option>
-            </select>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-[#454b66] mb-2">Category</label>
+              <select 
+                id="todo-category-input" 
+                required
+                class="w-full px-4 py-3 bg-[#9ca3db]/10 border border-[#9ca3db]/30 rounded-xl focus:ring-2 focus:ring-[#677db7]/30 focus:border-[#677db7] outline-none transition-all text-[#454b66]"
+              >
+                <option value="" disabled selected>Select</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-[#454b66] mb-2">Status</label>
+              <select 
+                id="todo-status-input" 
+                class="w-full px-4 py-3 bg-[#9ca3db]/10 border border-[#9ca3db]/30 rounded-xl focus:ring-2 focus:ring-[#677db7]/30 focus:border-[#677db7] outline-none transition-all text-[#454b66]"
+              >
+                <option value="pending">⏳ Pending</option>
+                <option value="in-progress">🔄 In Progress</option>
+                <option value="completed">✅ Completed</option>
+              </select>
+            </div>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-            <select 
-              id="todo-status-input" 
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-            >
-              <option value="pending">Pending</option>
-              <option value="in-progress">In Progress</option>
-              <option value="completed">Completed</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Due Date</label>
+            <label class="block text-sm font-semibold text-[#454b66] mb-2">Due Date</label>
             <input 
               type="date" 
               id="todo-date-input" 
               required
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              class="w-full px-4 py-3 bg-[#9ca3db]/10 border border-[#9ca3db]/30 rounded-xl focus:ring-2 focus:ring-[#677db7]/30 focus:border-[#677db7] outline-none transition-all text-[#454b66]"
             />
           </div>
-          <div class="flex gap-3 pt-4">
-            <button 
-              type="submit" 
-              class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-full transition-colors shadow"
-            >
-              Add Todo
-            </button>
+          <div class="flex gap-3 pt-2">
             <button 
               type="button" 
               id="cancel-todo" 
-              class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 rounded-full transition-colors shadow"
+              class="flex-1 bg-[#9ca3db]/20 hover:bg-[#9ca3db]/30 text-[#454b66] font-semibold py-3 rounded-xl transition-all"
             >
               Cancel
+            </button>
+            <button 
+              type="submit" 
+              class="flex-1 bg-gradient-to-r from-[#677db7] to-[#9ca3db] hover:from-[#5a6fa3] hover:to-[#8b93c9] text-white font-semibold py-3 rounded-xl transition-all shadow-lg shadow-[#677db7]/25"
+            >
+              Create Task
             </button>
           </div>
         </form>
@@ -428,57 +447,66 @@ class TodoViewer {
 
   private renderEmptyState(): void {
     const emptyState = document.createElement('div');
-    emptyState.className = 'text-center py-12';
+    emptyState.className = 'text-center py-16';
     emptyState.innerHTML = `
-      <div class="text-gray-400 mb-4">
-        <svg class="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-        </svg>
+      <div class="w-20 h-20 bg-gradient-to-br from-[#9ca3db]/30 to-[#677db7]/30 rounded-2xl flex items-center justify-center mx-auto mb-6">
+        <span class="text-4xl">📝</span>
       </div>
-      <h3 class="text-lg font-medium text-gray-900 mb-2">No todos yet</h3>
-      <p class="text-gray-500">Get started by adding your first todo item!</p>
+      <h3 class="text-xl font-bold text-[#191308] mb-2">No tasks yet</h3>
+      <p class="text-[#454b66] mb-6">Create your first task to get started!</p>
+      <button onclick="document.getElementById('add-todo').click()" class="inline-flex items-center gap-2 bg-gradient-to-r from-[#677db7] to-[#9ca3db] hover:from-[#5a6fa3] hover:to-[#8b93c9] text-white font-semibold py-3 px-6 rounded-xl transition-all shadow-lg shadow-[#677db7]/25">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        Add your first task
+      </button>
     `;
     this.todoListElement.appendChild(emptyState);
   }
 
   private createTodoElement(todo: any, categoryMap: Map<string, string>): HTMLElement {
     const todoElement = document.createElement('div');
-    todoElement.className = 'card glass p-4 hover:shadow-lg transition-shadow';
+    todoElement.className = 'group bg-white hover:bg-[#9ca3db]/10 border border-[#9ca3db]/20 hover:border-[#677db7]/50 rounded-xl p-4 transition-all duration-200 hover:shadow-lg hover:shadow-[#677db7]/10';
 
-    const statusColor = this.getStatusColor(todo.status);
+    const statusConfig = this.getStatusConfig(todo.status);
     const categoryName = categoryMap.get(todo.categoryId) || 'Unknown Category';
     const dueDateFormatted = this.formatDate(todo.dueDate);
+    const isOverdue = new Date(todo.dueDate) < new Date() && todo.status !== 'completed';
 
     todoElement.innerHTML = `
-      <div class="flex items-start justify-between">
-        <div class="flex-1">
-          <div class="flex items-center space-x-3 mb-2">
-            <h3 class="text-lg font-semibold text-gray-900">${this.escapeHtml(todo.name)}</h3>
-            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColor}">
-              ${this.capitalizeFirst(todo.status)}
-            </span>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
-            <div>
-              <span class="font-medium">Category:</span> ${this.escapeHtml(categoryName)}
-            </div>
-            <div>
-              <span class="font-medium">Due Date:</span> ${dueDateFormatted}
-            </div>
-          </div>
-
-          <div class="mt-2 text-xs text-gray-500">
-            ID: ${todo.id}
+      <div class="flex items-center gap-4">
+        <!-- Status Indicator -->
+        <div class="flex-shrink-0">
+          <div class="w-10 h-10 rounded-xl ${statusConfig.bg} flex items-center justify-center">
+            <span class="text-lg">${statusConfig.icon}</span>
           </div>
         </div>
-
-        <div class="flex space-x-2 ml-4">
-          <button class="edit-btn bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition-colors" data-todo-id="${todo.id}">
-            Edit
+        
+        <!-- Content -->
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 mb-1">
+            <h3 class="text-base font-semibold text-[#191308] truncate ${todo.status === 'completed' ? 'line-through text-[#9ca3db]' : ''}">${this.escapeHtml(todo.name)}</h3>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${statusConfig.badge}">
+              ${statusConfig.label}
+            </span>
+          </div>
+          <div class="flex items-center gap-4 text-sm text-[#454b66]">
+            <span class="inline-flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+              ${this.escapeHtml(categoryName)}
+            </span>
+            <span class="inline-flex items-center gap-1 ${isOverdue ? 'text-red-500 font-medium' : ''}">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              ${dueDateFormatted}${isOverdue ? ' (Overdue)' : ''}
+            </span>
+          </div>
+        </div>
+        
+        <!-- Actions -->
+        <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button class="edit-btn p-2 text-[#454b66] hover:text-[#677db7] hover:bg-[#9ca3db]/20 rounded-lg transition-colors" data-todo-id="${todo.id}" title="Edit">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
           </button>
-          <button class="delete-btn bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition-colors" data-todo-id="${todo.id}">
-            Delete
+          <button class="delete-btn p-2 text-[#454b66] hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" data-todo-id="${todo.id}" title="Delete">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
           </button>
         </div>
       </div>
@@ -492,6 +520,18 @@ class TodoViewer {
     deleteBtn.addEventListener('click', () => this.handleDeleteTodo(todo.id));
 
     return todoElement;
+  }
+
+  private getStatusConfig(status: string): { bg: string; badge: string; icon: string; label: string } {
+    switch (status) {
+      case 'completed':
+        return { bg: 'bg-emerald-100', badge: 'bg-emerald-100 text-emerald-700', icon: '✅', label: 'Done' };
+      case 'in-progress':
+        return { bg: 'bg-amber-100', badge: 'bg-amber-100 text-amber-700', icon: '🔄', label: 'In Progress' };
+      case 'pending':
+      default:
+        return { bg: 'bg-[#9ca3db]/30', badge: 'bg-[#9ca3db]/30 text-[#454b66]', icon: '⏳', label: 'Pending' };
+    }
   }
 
   private getStatusColor(status: string): string {

@@ -26,80 +26,100 @@ export class ChatViewer {
 
   private render(): void {
     this.container.innerHTML = `
-      <div class="min-h-screen flex flex-col items-center justify-center py-6">
-        <!-- Header -->
-        <div class="glass card shadow-sm border-b border-gray-200 w-full max-w-4xl mx-auto mb-4">
-          <div class="px-4 py-4">
-            <div class="flex items-center justify-between">
-              <div>
-                <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2 tracking-tight">
-                  🤖 AI Chat Assistant
-                </h1>
-                <p class="text-sm text-gray-500 mt-1">Powered by Ollama (gpt-oss)</p>
+      <div class="min-h-screen flex flex-col items-center py-10">
+        <div class="max-w-4xl w-full mx-auto px-6">
+          <!-- Hero Header -->
+          <div class="text-center mb-8">
+            <h1 class="text-5xl font-black text-[#191308] mb-3 tracking-tight">AI Chat Assistant</h1>
+            <p class="text-[#454b66] text-lg">Powered by Ollama • Ask me anything ✨</p>
+          </div>
+
+          <!-- Chat Container -->
+          <div class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-[#9ca3db]/30 overflow-hidden">
+            <!-- Chat Header -->
+            <div class="px-6 py-4 border-b border-[#9ca3db]/20 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-[#677db7] to-[#9ca3db] rounded-xl flex items-center justify-center">
+                  <span class="text-xl">🤖</span>
+                </div>
+                <div>
+                  <h2 class="text-lg font-bold text-[#191308]">Chat Session</h2>
+                  <p class="text-xs text-[#454b66]">Messages are not saved between sessions</p>
+                </div>
               </div>
               <button
                 id="clear-chat-btn"
-                class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full transition-colors text-sm font-medium shadow"
+                class="inline-flex items-center gap-2 bg-white hover:bg-red-50 text-[#454b66] hover:text-red-600 font-semibold py-2 px-4 rounded-xl transition-all duration-200 border border-[#9ca3db]/50 hover:border-red-300 shadow-sm text-sm"
               >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                 Clear Chat
               </button>
             </div>
-          </div>
-        </div>
 
-        <!-- Messages Container -->
-        <div class="glass card flex-1 overflow-y-auto w-full max-w-4xl mx-auto mb-4" id="messages-container">
-          <div class="px-4 py-6 space-y-4">
-            <!-- Welcome message -->
-            <div class="text-center py-8">
-              <div class="inline-block bg-blue-100 text-blue-800 px-6 py-3 rounded-lg">
-                <p class="font-medium">👋 Welcome! Ask me anything.</p>
+            <!-- Messages Container -->
+            <div class="h-[400px] overflow-y-auto bg-[#9ca3db]/5" id="messages-container">
+              <div class="px-6 py-6 space-y-4">
+                <!-- Welcome message -->
+                <div class="text-center py-12">
+                  <div class="w-16 h-16 bg-gradient-to-br from-[#9ca3db]/30 to-[#677db7]/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <span class="text-3xl">🤖</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-[#191308] mb-2">Welcome!</h3>
+                  <p class="text-[#454b66]">Ask me anything or upload an image for analysis.</p>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <!-- Input Area -->
-        <div class="glass card border-t border-gray-200 shadow-lg w-full max-w-4xl mx-auto">
-          <div class="px-4 py-4">
-            <!-- Image Preview Area -->
-            <div id="image-preview" class="hidden mb-3 relative">
-              <img id="preview-img" class="max-h-32 rounded-lg border-2 border-blue-500" />
-              <button
-                id="remove-image"
-                class="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold"
-              >
-                ✕
-              </button>
+            <!-- Input Area -->
+            <div class="px-6 py-4 border-t border-[#9ca3db]/20 bg-white/50">
+              <!-- Image Preview Area -->
+              <div id="image-preview" class="hidden mb-4">
+                <div class="inline-flex items-center gap-3 bg-[#9ca3db]/10 border border-[#9ca3db]/30 rounded-xl px-3 py-2">
+                  <img id="preview-img" class="h-12 w-12 object-cover rounded-lg" />
+                  <span class="text-sm text-[#454b66]">Image attached</span>
+                  <button
+                    id="remove-image"
+                    class="text-[#454b66] hover:text-red-500 transition-colors p-1"
+                    title="Remove image"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="flex gap-3 items-center">
+                <input
+                  type="file"
+                  id="image-input"
+                  accept="image/*"
+                  class="hidden"
+                />
+                <button
+                  id="upload-btn"
+                  class="flex-shrink-0 w-11 h-11 bg-white hover:bg-[#9ca3db]/10 text-[#454b66] hover:text-[#677db7] rounded-xl transition-all duration-200 border border-[#9ca3db]/50 shadow-sm hover:shadow-md flex items-center justify-center"
+                  title="Upload image for analysis"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                </button>
+                <div class="flex-1">
+                  <textarea
+                    id="chat-input"
+                    rows="1"
+                    placeholder="Type your message... (Enter to send, Shift+Enter for new line)"
+                    class="w-full px-4 py-2.5 bg-[#9ca3db]/10 border border-[#9ca3db]/30 rounded-xl focus:ring-2 focus:ring-[#677db7]/30 focus:border-[#677db7] outline-none transition-all text-[#191308] placeholder-[#454b66]/50 resize-none"
+                  ></textarea>
+                </div>
+                <button
+                  id="send-btn"
+                  class="flex-shrink-0 inline-flex items-center justify-center bg-gradient-to-r from-[#677db7] to-[#9ca3db] hover:from-[#5a6fa3] hover:to-[#8b93c9] text-white font-semibold h-11 px-6 rounded-xl transition-all duration-200 shadow-lg shadow-[#677db7]/25 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-lg"
+                >
+                  Send
+                </button>
+              </div>
+              <p class="text-xs text-[#454b66]/70 mt-3 flex items-center gap-2">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Session-only chat • Upload images with 📷 for vision analysis
+              </p>
             </div>
-            <div class="flex gap-3">
-              <input
-                type="file"
-                id="image-input"
-                accept="image/*"
-                class="hidden"
-              />
-              <button
-                id="upload-btn"
-                class="bg-gray-500 hover:bg-gray-600 text-white px-4 rounded-full transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed shadow"
-                title="Upload image"
-              >
-                📷
-              </button>
-              <textarea
-                id="chat-input"
-                rows="3"
-                placeholder="Type your message... (Press Enter to send, Shift+Enter for new line)"
-                class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none"
-              ></textarea>
-              <button
-                id="send-btn"
-                class="bg-blue-500 hover:bg-blue-600 text-white px-6 rounded-full transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed shadow"
-              >
-                Send 📤
-              </button>
-            </div>
-            <p class="text-xs text-gray-500 mt-2">Session-only chat • Messages are not saved • 📷 Upload images for vision analysis</p>
           </div>
         </div>
       </div>
@@ -320,7 +340,7 @@ export class ChatViewer {
 
     let imageHtml = ''
     if (imageUrl) {
-      imageHtml = `<img src="${imageUrl}" class="max-w-xs rounded-lg mb-2 border-2 border-white" />`
+      imageHtml = `<img src="${imageUrl}" class="max-w-xs rounded-xl mb-2 shadow-md" />`
     }
 
     let textHtml = ''
@@ -329,14 +349,14 @@ export class ChatViewer {
     }
 
     messageDiv.innerHTML = `
-      <div class="max-w-[80%] bg-blue-500 text-white rounded-lg px-4 py-3 shadow-sm">
+      <div class="max-w-[80%] bg-gradient-to-r from-[#677db7] to-[#9ca3db] text-white rounded-2xl rounded-br-md px-4 py-3 shadow-lg">
         <div class="flex items-start gap-2">
-          <span class="text-lg">👤</span>
           <div class="flex-1">
-            <p class="text-sm font-semibold mb-1">You</p>
+            <p class="text-xs font-semibold mb-1 opacity-80">You</p>
             ${imageHtml}
             ${textHtml}
           </div>
+          <span class="text-lg">👤</span>
         </div>
       </div>
     `
@@ -391,21 +411,23 @@ export class ChatViewer {
     }
 
     const isUser = role === 'user'
-    const bgColor = isUser ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'
+    const bgColor = isUser ? 'bg-gradient-to-r from-[#677db7] to-[#9ca3db] text-white' : 'bg-white text-[#191308] border border-[#9ca3db]/20'
     const alignment = isUser ? 'justify-end' : 'justify-start'
     const icon = isUser ? '👤' : '🤖'
+    const roundedClass = isUser ? 'rounded-2xl rounded-br-md' : 'rounded-2xl rounded-bl-md'
 
     messageDiv.className = `flex ${alignment}`
     messageDiv.innerHTML = `
-      <div class="max-w-[80%] ${bgColor} rounded-lg px-4 py-3 shadow-sm">
+      <div class="max-w-[80%] ${bgColor} ${roundedClass} px-4 py-3 shadow-lg">
         <div class="flex items-start gap-2">
-          <span class="text-lg">${icon}</span>
+          ${!isUser ? `<span class="text-lg">${icon}</span>` : ''}
           <div class="flex-1">
-            <p class="text-sm font-semibold mb-1">${isUser ? 'You' : 'Assistant'}</p>
-            <div class="message-content whitespace-pre-wrap text-sm prose prose-sm max-w-none ${isUser ? 'prose-invert' : ''}">${
+            <p class="text-xs font-semibold mb-1 ${isUser ? 'opacity-80' : 'text-[#454b66]'}">${isUser ? 'You' : 'Assistant'}</p>
+            <div class="message-content whitespace-pre-wrap text-sm prose prose-sm max-w-none ${isUser ? 'prose-invert' : 'prose-slate'}">${
               isUser ? this.escapeHtml(content) : marked.parse(content)
             }</div>
           </div>
+          ${isUser ? `<span class="text-lg">${icon}</span>` : ''}
         </div>
       </div>
     `
@@ -419,9 +441,9 @@ export class ChatViewer {
     this.sendButton.disabled = !enabled
 
     if (!enabled) {
-      this.sendButton.textContent = 'Streaming... ⏳'
+      this.sendButton.textContent = 'Thinking...'
     } else {
-      this.sendButton.textContent = 'Send 📤'
+      this.sendButton.textContent = 'Send'
     }
   }
 
@@ -430,10 +452,12 @@ export class ChatViewer {
       this.messages = []
       const contentWrapper = this.messagesContainer.querySelector('.space-y-4')!
       contentWrapper.innerHTML = `
-        <div class="text-center py-8">
-          <div class="inline-block bg-blue-100 text-blue-800 px-6 py-3 rounded-lg">
-            <p class="font-medium">👋 Welcome! Ask me anything.</p>
+        <div class="text-center py-12">
+          <div class="w-16 h-16 bg-gradient-to-br from-[#9ca3db]/30 to-[#677db7]/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <span class="text-3xl">🤖</span>
           </div>
+          <h3 class="text-lg font-bold text-[#191308] mb-2">Welcome!</h3>
+          <p class="text-[#454b66]">Ask me anything or upload an image for analysis.</p>
         </div>
       `
     }
@@ -443,9 +467,14 @@ export class ChatViewer {
     const errorDiv = document.createElement('div')
     errorDiv.className = 'flex justify-center'
     errorDiv.innerHTML = `
-      <div class="bg-red-100 text-red-800 rounded-lg px-4 py-3 shadow-sm max-w-[80%]">
-        <p class="text-sm font-semibold mb-1">❌ Error</p>
-        <p class="text-sm">${this.escapeHtml(message)}</p>
+      <div class="bg-red-50 text-red-700 border border-red-200 rounded-xl px-4 py-3 shadow-md max-w-[80%]">
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <div>
+            <p class="text-sm font-semibold">Error</p>
+            <p class="text-sm">${this.escapeHtml(message)}</p>
+          </div>
+        </div>
       </div>
     `
 
