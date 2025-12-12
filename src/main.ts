@@ -180,6 +180,30 @@ class AppRouter {
       </div>
     </div>
 
+    <!-- Delete Category Modal -->
+    <div id="delete-category-modal" class="fixed inset-0 bg-[#191308]/50 backdrop-blur-sm z-50 hidden items-center justify-center">
+      <div class="bg-white border border-[#9ca3db]/30 rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 transform transition-all">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
+            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+          </div>
+          <h2 class="text-2xl font-bold text-[#191308]">Delete Category</h2>
+        </div>
+        <div id="delete-category-list" class="space-y-2 max-h-96 overflow-y-auto">
+          <!-- Categories will be rendered here -->
+        </div>
+        <div class="flex gap-3 pt-6">
+          <button 
+            type="button" 
+            id="cancel-delete-category" 
+            class="flex-1 bg-[#9ca3db]/20 hover:bg-[#9ca3db]/30 text-[#454b66] font-semibold py-3 rounded-xl transition-all"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Add Todo Modal -->
     <div id="add-todo-modal" class="fixed inset-0 bg-[#191308]/50 backdrop-blur-sm z-50 hidden items-center justify-center">
       <div class="bg-white border border-[#9ca3db]/30 rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 transform transition-all">
@@ -250,6 +274,78 @@ class AppRouter {
         </form>
       </div>
     </div>
+
+    <!-- Edit Todo Modal -->
+    <div id="edit-todo-modal" class="fixed inset-0 bg-[#191308]/50 backdrop-blur-sm z-50 hidden items-center justify-center">
+      <div class="bg-white border border-[#9ca3db]/30 rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 transform transition-all">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-12 h-12 bg-gradient-to-br from-[#677db7] to-[#9ca3db] rounded-xl flex items-center justify-center">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+          </div>
+          <h2 class="text-2xl font-bold text-[#191308]">Edit Task</h2>
+        </div>
+        <form id="edit-todo-form" class="space-y-5">
+          <input type="hidden" id="edit-todo-id" />
+          <div>
+            <label class="block text-sm font-semibold text-[#454b66] mb-2">Task Name</label>
+            <input 
+              type="text" 
+              id="edit-todo-name-input" 
+              required
+              class="w-full px-4 py-3 bg-[#9ca3db]/10 border border-[#9ca3db]/30 rounded-xl focus:ring-2 focus:ring-[#677db7]/30 focus:border-[#677db7] outline-none transition-all text-[#191308] placeholder-[#454b66]/50"
+              placeholder="What needs to be done?"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-[#454b66] mb-2">Category</label>
+              <select 
+                id="edit-todo-category-input" 
+                required
+                class="w-full px-4 py-3 bg-[#9ca3db]/10 border border-[#9ca3db]/30 rounded-xl focus:ring-2 focus:ring-[#677db7]/30 focus:border-[#677db7] outline-none transition-all text-[#454b66]"
+              >
+                <option value="" disabled selected>Select</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-[#454b66] mb-2">Status</label>
+              <select 
+                id="edit-todo-status-input" 
+                class="w-full px-4 py-3 bg-[#9ca3db]/10 border border-[#9ca3db]/30 rounded-xl focus:ring-2 focus:ring-[#677db7]/30 focus:border-[#677db7] outline-none transition-all text-[#454b66]"
+              >
+                <option value="pending">⏳ Pending</option>
+                <option value="in-progress">🔄 In Progress</option>
+                <option value="completed">✅ Completed</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-[#454b66] mb-2">Due Date</label>
+            <input 
+              type="date" 
+              id="edit-todo-date-input" 
+              required
+              class="w-full px-4 py-3 bg-[#9ca3db]/10 border border-[#9ca3db]/30 rounded-xl focus:ring-2 focus:ring-[#677db7]/30 focus:border-[#677db7] outline-none transition-all text-[#454b66]"
+            />
+          </div>
+          <div class="flex gap-3 pt-2">
+            <button 
+              type="button" 
+              id="cancel-edit-todo" 
+              class="flex-1 bg-[#9ca3db]/20 hover:bg-[#9ca3db]/30 text-[#454b66] font-semibold py-3 rounded-xl transition-all"
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              class="flex-1 bg-gradient-to-r from-[#677db7] to-[#9ca3db] hover:from-[#5a6fa3] hover:to-[#8b93c9] text-white font-semibold py-3 rounded-xl transition-all shadow-lg shadow-[#677db7]/25"
+            >
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 `
     // NOW render the nav bar after all HTML is in place
@@ -273,16 +369,7 @@ class AppRouter {
     }
 
     document.querySelector<HTMLButtonElement>("#delete-category")!.onclick = async () => {
-      const categoryId = prompt("Enter category ID to delete:")
-      if (categoryId) {
-        try {
-          await deleteCategory(categoryId)
-          alert(`Category with ID ${categoryId} deleted.`)
-          updateCategoriesDropdown()
-        } catch (error) {
-          alert(`Failed to delete category: ${error}`)
-        }
-      }
+      openDeleteCategoryModal();
     }
 
     // Initialize the todo viewer
@@ -306,6 +393,8 @@ class AppRouter {
     });
 
     document.getElementById('cancel-category')!.addEventListener('click', closeAddCategoryModal);
+
+    document.getElementById('cancel-delete-category')!.addEventListener('click', closeDeleteCategoryModal);
 
     // Add Todo Form Handler
     document.getElementById('add-todo-form')!.addEventListener('submit', async (e) => {
@@ -332,6 +421,34 @@ class AppRouter {
     });
 
     document.getElementById('cancel-todo')!.addEventListener('click', closeAddTodoModal);
+
+    // Edit Todo Form Handler
+    document.getElementById('edit-todo-form')!.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const idInput = document.getElementById('edit-todo-id') as HTMLInputElement;
+      const nameInput = document.getElementById('edit-todo-name-input') as HTMLInputElement;
+      const categoryInput = document.getElementById('edit-todo-category-input') as HTMLSelectElement;
+      const statusInput = document.getElementById('edit-todo-status-input') as HTMLSelectElement;
+      const dateInput = document.getElementById('edit-todo-date-input') as HTMLInputElement;
+      
+      const todoId = idInput.value;
+      const todoName = nameInput.value.trim();
+      const categoryId = categoryInput.value;
+      const status = statusInput.value as 'pending' | 'in-progress' | 'completed';
+      const dueDate = new Date(dateInput.value);
+      
+      if (todoName && categoryId && todoId) {
+        try {
+          await editTodo(todoId, { name: todoName, status, categoryId, dueDate });
+          await this.todoViewer?.renderTodos();
+          closeEditTodoModal();
+        } catch (error) {
+          alert(`Failed to update todo: ${error}`);
+        }
+      }
+    });
+
+    document.getElementById('cancel-edit-todo')!.addEventListener('click', closeEditTodoModal);
   }
 }
 
@@ -354,6 +471,89 @@ function closeAddCategoryModal() {
   form?.reset();
 }
 
+async function openDeleteCategoryModal() {
+  const modal = document.getElementById('delete-category-modal');
+  if (modal) {
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    await renderDeleteCategoryList();
+  }
+}
+
+function closeDeleteCategoryModal() {
+  const modal = document.getElementById('delete-category-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+}
+
+async function renderDeleteCategoryList() {
+  const listContainer = document.getElementById('delete-category-list');
+  if (!listContainer) return;
+
+  const categories = await getAllCategories();
+  
+  if (categories.length === 0) {
+    listContainer.innerHTML = `
+      <div class="text-center py-8 text-[#454b66]">
+        <svg class="w-16 h-16 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+        </svg>
+        <p class="font-semibold">No categories found</p>
+        <p class="text-sm mt-1">Create a category to get started</p>
+      </div>
+    `;
+    return;
+  }
+
+  listContainer.innerHTML = categories.map(category => `
+    <div class="flex items-center justify-between p-4 bg-[#9ca3db]/10 hover:bg-[#9ca3db]/20 rounded-xl transition-all border border-[#9ca3db]/20">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-gradient-to-br from-[#677db7] to-[#9ca3db] rounded-lg flex items-center justify-center">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+          </svg>
+        </div>
+        <div>
+          <p class="font-semibold text-[#191308]">${category.name}</p>
+          <p class="text-xs text-[#454b66]">ID: ${category.id}</p>
+        </div>
+      </div>
+      <button 
+        class="delete-category-btn px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg transition-all shadow-sm hover:shadow-md flex items-center gap-2"
+        data-category-id="${category.id}"
+        data-category-name="${category.name}"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+        </svg>
+        Delete
+      </button>
+    </div>
+  `).join('');
+
+  // Add event listeners to all delete buttons
+  const deleteButtons = listContainer.querySelectorAll('.delete-category-btn');
+  deleteButtons.forEach(button => {
+    button.addEventListener('click', async (e) => {
+      const target = e.currentTarget as HTMLButtonElement;
+      const categoryId = target.dataset.categoryId;
+      const categoryName = target.dataset.categoryName;
+      
+      if (categoryId && confirm(`Are you sure you want to delete "${categoryName}"? This will also delete all associated todos.`)) {
+        try {
+          await deleteCategory(categoryId);
+          await renderDeleteCategoryList();
+          await updateCategoriesDropdown();
+        } catch (error) {
+          alert(`Failed to delete category: ${error}`);
+        }
+      }
+    });
+  });
+}
+
 function openAddTodoModal() {
   updateTodoCategoryDropdown();
   const modal = document.getElementById('add-todo-modal');
@@ -370,6 +570,52 @@ function closeAddTodoModal() {
     modal.classList.remove('flex');
   }
   const form = document.getElementById('add-todo-form') as HTMLFormElement;
+  form?.reset();
+}
+
+async function openEditTodoModal(todoId: string) {
+  const todos = await getAllTodos();
+  const todo = todos.find(t => t.id === todoId);
+  
+  if (!todo) {
+    alert('Todo not found');
+    return;
+  }
+
+  // Populate the form fields with current todo data
+  const idInput = document.getElementById('edit-todo-id') as HTMLInputElement;
+  const nameInput = document.getElementById('edit-todo-name-input') as HTMLInputElement;
+  const categoryInput = document.getElementById('edit-todo-category-input') as HTMLSelectElement;
+  const statusInput = document.getElementById('edit-todo-status-input') as HTMLSelectElement;
+  const dateInput = document.getElementById('edit-todo-date-input') as HTMLInputElement;
+
+  idInput.value = todo.id;
+  nameInput.value = todo.name;
+  statusInput.value = todo.status;
+  
+  // Format date to YYYY-MM-DD for input
+  const date = new Date(todo.dueDate);
+  dateInput.value = date.toISOString().split('T')[0];
+
+  // Populate category dropdown
+  await updateEditTodoCategoryDropdown();
+  categoryInput.value = todo.categoryId;
+
+  // Show modal
+  const modal = document.getElementById('edit-todo-modal');
+  if (modal) {
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+}
+
+function closeEditTodoModal() {
+  const modal = document.getElementById('edit-todo-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+  const form = document.getElementById('edit-todo-form') as HTMLFormElement;
   form?.reset();
 }
 
@@ -393,6 +639,22 @@ async function updateCategoriesDropdown() {
 // Function to populate todo category dropdown in the modal
 async function updateTodoCategoryDropdown() {
   const dropdown = document.getElementById('todo-category-input') as HTMLSelectElement;
+  const categories = await getAllCategories();
+
+  // Clear existing options
+  dropdown.innerHTML = '<option value="" disabled selected>Select category</option>';
+
+  // Add each category as an option
+  categories.forEach(category => {
+    const option = document.createElement('option');
+    option.value = category.id;
+    option.textContent = category.name;
+    dropdown.appendChild(option);
+  });
+}
+
+async function updateEditTodoCategoryDropdown() {
+  const dropdown = document.getElementById('edit-todo-category-input') as HTMLSelectElement;
   const categories = await getAllCategories();
 
   // Clear existing options
@@ -569,16 +831,7 @@ class TodoViewer {
   }
 
   private async handleEditTodo(todoId: string): Promise<void> {
-    const newName = prompt('Enter new name for the todo:');
-    if (newName && newName.trim()) {
-      try {
-        await editTodo(todoId, { name: newName.trim() });
-        await this.renderTodos(); // Refresh the view
-        alert('Todo updated successfully!');
-      } catch (error) {
-        alert(`Failed to update todo: ${error}`);
-      }
-    }
+    await openEditTodoModal(todoId);
   }
 
   private async handleDeleteTodo(todoId: string): Promise<void> {
